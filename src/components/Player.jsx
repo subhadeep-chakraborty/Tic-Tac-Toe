@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, isActive }) {
+export default function Player({ initialName, symbol, isActive , savePlayer}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [playerName, setPlayerName] = useState(initialName);
@@ -22,6 +22,7 @@ export default function Player({ initialName, symbol, isActive }) {
     
     */
     setIsEditing((editing) => !editing);
+    savePlayer(symbol, playerName);
   }
 
   function handleChange(event){
@@ -47,7 +48,7 @@ export default function Player({ initialName, symbol, isActive }) {
         <span className="player-symbol">{symbol}</span>
       </span>
       {!isEditing && <button onClick={handleEditClick}>Edit</button>}
-      {isEditing && <button onClick={handleEditClick}>Save</button>}
+      {isEditing && <button onClick={(handleEditClick)}>Save</button>}
     </li>
   );
 }

@@ -15,16 +15,22 @@ const initialGameBoard =[
 function deriveActivePlayer(gameTurns){
   let currPlayerSymbol = 'X';
   if(gameTurns.length && gameTurns[0].player === 'X'){
-    currPlayerSymbol = 'O';
+    currPlayerSymbol = 'O'; 
   }
   return currPlayerSymbol;
 }
+
 
 
 function App() {
   // const [activePlayer, setActiveplayer]= useState('X');
   const [gameTurns, setGameTurns] =useState([]);
   const activePlayer = deriveActivePlayer(gameTurns);
+  const [playerName, setPlayerName] = useState({X: 'Player1', O: 'Player2'});
+  
+function handleSetPlayerName(symbol, name){
+  setPlayerName((previousNames => ({...previousNames, [symbol]: name})));
+}
 
   let gameBoard = [...initialGameBoard.map(array =>[ ...array])]; //deep copy 
   for(const turn of gameTurns){
@@ -41,7 +47,7 @@ function App() {
 
     if(firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && 
       firstSquareSymbol === thirdSquareSymbol){
-        winner = firstSquareSymbol;
+        winner = playerName[firstSquareSymbol];
       }
   }
   const hasDraw = gameTurns.length === 9 && !winner;
@@ -66,8 +72,8 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players" className ="highlight-player">
-        <Player initialName='Sam' symbol='X' isActive={activePlayer === 'X'}/>
-        <Player initialName='Hank' symbol='O' isActive={activePlayer === 'O'}/>
+        <Player initialName={playerName['X']} symbol='X' isActive={activePlayer === 'X'} savePlayer={handleSetPlayerName}/>
+        <Player initialName={playerName['O']} symbol='O' isActive={activePlayer === 'O'} savePlayer={handleSetPlayerName}/>
         </ol>
         {(winner || hasDraw) && <GameOver winner={winner}  restart={handleRestart}/>}
         <GameBoard onSelectSquare={handleActivePlayer} board={gameBoard}/>
